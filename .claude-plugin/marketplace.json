@@ -4,6 +4,6 @@
   "description": "Poorya's Claude Code mods",
   "plugins": [
     { "name": "cko", "source": "./mods/cko", "description": "/cko — open the session's directory in VS Code" },
-    { "name": "cku", "source": "./mods/cku", "description": "/cku — update every installed claude-kit mod and reload" }
+    { "name": "cku", "source": "./mods/cku", "description": "/cku — sync claude-kit mods: install new, remove gone, update the rest" }
   ]
 }

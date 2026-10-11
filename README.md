@@ -4,7 +4,7 @@
 | Mod | What it does |
 | --- | --- |
 | `cko` | `/cko` opens the current directory in VS Code. Needs `code` on your `PATH`. |
-| `cku` | `/cku` updates all installed claude-kit mods and reloads them. |
+| `cku` | `/cku` syncs your claude-kit mods with this repo: installs new ones, removes old ones, updates the rest, reloads. |
 
 ## Install
 

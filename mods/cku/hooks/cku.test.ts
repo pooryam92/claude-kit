@@ -9,20 +9,34 @@ const run: CommandRunInput = {
   origin: { kind: 'composer' },
   presentation: { isFullscreen: false, columns: 120 },
 }
-const LIST = JSON.stringify([
-  { id: 'cko@claude-kit', scope: 'user' },
+const DIR = '/home/me/.claude/plugins/marketplaces/claude-kit'
+const MARKETS = JSON.stringify([
+  { name: 'claude-plugins-official', installLocation: '/x' },
+  { name: 'claude-kit', installLocation: DIR },
+])
+const CATALOG = JSON.stringify({ name: 'claude-kit', plugins: [{ name: 'cko' }, { name: 'cku' }] })
+const INSTALLED = JSON.stringify([
+  { id: 'open@claude-kit', scope: 'user' },
   { id: 'cku@claude-kit', scope: 'user' },
   { id: 'github@claude-plugins-official', scope: 'user' },
 ])
 
-test('/cku updates the marketplace and each claude-kit mod, then reloads', async ($, on) => {
+const answer = (argv: readonly string[]) => {
+  const cmd = argv.join(' ')
+  if (cmd === 'claude plugin marketplace list --json') return ok(MARKETS)
+  if (cmd === `cat ${DIR}/.claude-plugin/marketplace.json`) return ok(CATALOG)
+  if (cmd === 'claude plugin list --json') return ok(INSTALLED)
+  return ok()
+}
+
+test('/cku installs new mods, removes gone ones, updates the rest, then reloads', async ($, on) => {
   const clock = mock.clock(on)
   const ran: string[] = []
   const toasts: string[] = []
   let reloaded = false
   on('process.run', (_$, e) => {
     ran.push(e.argv.join(' '))
-    return { value: ok(e.argv.includes('list') ? LIST : '') }
+    return { value: answer(e.argv) }
   })
   on('ui.toast', (_$, e) => {
     toasts.push(e.text)
@@ -39,12 +53,15 @@ test('/cku updates the marketplace and each claude-kit mod, then reloads', async
 
   expect(ran).toEqual([
     'claude plugin marketplace update claude-kit',
+    'claude plugin marketplace list --json',
+    `cat ${DIR}/.claude-plugin/marketplace.json`,
     'claude plugin list --json',
-    'claude plugin update cko@claude-kit --scope user',
+    'claude plugin uninstall open@claude-kit --scope user',
     'claude plugin update cku@claude-kit --scope user',
+    'claude plugin install cko@claude-kit --scope user',
   ])
   expect(reloaded).toBe(true)
-  expect(toasts.at(-1)).toBe('Updated cko, cku, reloading…')
+  expect(toasts.at(-1)).toBe('claude-kit: +cko · -open · updated cku, reloading…')
 })
 
 test('/cku toasts a failure and stops', async ($, on) => {
