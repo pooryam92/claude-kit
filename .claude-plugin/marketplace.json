@@ -3,7 +3,8 @@
   "owner": { "name": "Poorya" },
   "description": "Poorya's Claude Code plugins: mods and skills",
   "plugins": [
-    { "name": "cko", "source": "./plugins/cko", "description": "/cko — open the session's directory in VS Code" },
-    { "name": "cku", "source": "./plugins/cku", "description": "/cku — sync claude-kit plugins: install new, remove gone, update the rest" }
+    { "name": "ckopen", "source": "./plugins/ckopen", "description": "/ckopen — open the session's directory in VS Code" },
+    { "name": "ckupdate", "source": "./plugins/ckupdate", "description": "/ckupdate — sync claude-kit plugins: install new, remove gone, update the rest" },
+    { "name": "brainstorm", "source": "./plugins/brainstorm", "description": "/brainstorm — idea generation that samples the tails of the distribution instead of the obvious answers" }
   ]
 }

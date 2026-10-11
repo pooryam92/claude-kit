@@ -4,8 +4,8 @@ import { expect, mock, test } from 'claude-code/testing'
 const DIR = '/home/me/.claude/plugins/marketplaces/claude-kit'
 const CATALOG_FILE = `${DIR}/.claude-plugin/marketplace.json`
 
-const cku: CommandRunInput = {
-  command: 'cku',
+const ckupdate: CommandRunInput = {
+  command: 'ckupdate',
   args: '',
   origin: { kind: 'composer' },
   presentation: { isFullscreen: false, columns: 120 },
@@ -19,7 +19,7 @@ const exited = (exitCode: number, output = ''): ProcessRunResult => ({
   isStderrTruncated: false,
 })
 
-const catalog = { name: 'claude-kit', plugins: [{ name: 'cko' }, { name: 'cku' }] }
+const catalog = { name: 'claude-kit', plugins: [{ name: 'ckopen' }, { name: 'ckupdate' }] }
 const outputs: Record<string, unknown> = {
   'claude plugin marketplace list --json': [
     { name: 'claude-plugins-official', installLocation: '/x' },
@@ -27,7 +27,7 @@ const outputs: Record<string, unknown> = {
   ],
   'claude plugin list --json': [
     { id: 'open@claude-kit', scope: 'user' },
-    { id: 'cku@claude-kit', scope: 'user' },
+    { id: 'ckupdate@claude-kit', scope: 'user' },
     { id: 'github@claude-plugins-official', scope: 'user' },
   ],
 }
@@ -62,11 +62,11 @@ const host = (on: On, { os, failure }: Host = {}) => {
   return { toasts, ran, read, reloaded: () => reloaded }
 }
 
-test('/cku installs new plugins, removes gone ones, updates the rest, then reloads', async ($, on) => {
+test('/ckupdate installs new plugins, removes gone ones, updates the rest, then reloads', async ($, on) => {
   const clock = mock.clock(on)
   const { toasts, ran, read, reloaded } = host(on)
 
-  await $.command.run(cku)
+  await $.command.run(ckupdate)
   expect(reloaded()).toBe(false)
   await clock.advance(0)
 
@@ -75,28 +75,28 @@ test('/cku installs new plugins, removes gone ones, updates the rest, then reloa
     'claude plugin marketplace list --json',
     'claude plugin list --json',
     'claude plugin uninstall open@claude-kit --scope user',
-    'claude plugin update cku@claude-kit --scope user',
-    'claude plugin install cko@claude-kit --scope user',
+    'claude plugin update ckupdate@claude-kit --scope user',
+    'claude plugin install ckopen@claude-kit --scope user',
   ])
   expect(read).toEqual([CATALOG_FILE])
   expect(reloaded()).toBe(true)
-  expect(toasts.at(-1)).toBe('claude-kit: +cko · -open · updated cku, reloading…')
+  expect(toasts.at(-1)).toBe('claude-kit: +ckopen · -open · updated ckupdate, reloading…')
 })
 
-test('/cku goes through cmd on Windows', async ($, on) => {
+test('/ckupdate goes through cmd on Windows', async ($, on) => {
   mock.clock(on)
   const { ran } = host(on, { os: 'Windows_NT' })
 
-  await $.command.run(cku)
+  await $.command.run(ckupdate)
 
   expect(ran[0]).toBe('cmd /c claude plugin marketplace update claude-kit')
   expect(ran.every(cmd => cmd.startsWith('cmd /c claude plugin '))).toBe(true)
 })
 
-test('/cku toasts a failure and stops', async ($, on) => {
+test('/ckupdate toasts a failure and stops', async ($, on) => {
   const { toasts } = host(on, { failure: 'network down' })
 
-  await $.command.run(cku)
+  await $.command.run(ckupdate)
 
-  expect(toasts.at(-1)).toBe('cku failed: claude plugin marketplace update claude-kit: network down')
+  expect(toasts.at(-1)).toBe('ckupdate failed: claude plugin marketplace update claude-kit: network down')
 })
