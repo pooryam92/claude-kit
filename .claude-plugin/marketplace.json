@@ -1,8 +1,9 @@
 {
   "name": "claude-kit",
   "owner": { "name": "Poorya" },
-  "description": "Poorya's Claude Code skills and mods",
+  "description": "Poorya's Claude Code mods",
   "plugins": [
-    { "name": "open", "source": "./mods/open", "description": "/open — open the session's directory in VS Code" }
+    { "name": "cko", "source": "./mods/cko", "description": "/cko — open the session's directory in VS Code" },
+    { "name": "cku", "source": "./mods/cku", "description": "/cku — update every installed claude-kit mod and reload" }
   ]
 }

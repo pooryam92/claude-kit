@@ -1,6 +1,5 @@
 # claude-kit
 
-Mods for [Claude Code](https://claude.com/claude-code).
 
 | Mod | What it does |
 | --- | --- |
