@@ -29,7 +29,7 @@ const answer = (argv: readonly string[]) => {
   return ok()
 }
 
-test('/cku installs new mods, removes gone ones, updates the rest, then reloads', async ($, on) => {
+test('/cku installs new plugins, removes gone ones, updates the rest, then reloads', async ($, on) => {
   const clock = mock.clock(on)
   const ran: string[] = []
   const toasts: string[] = []

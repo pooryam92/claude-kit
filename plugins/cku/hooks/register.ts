@@ -10,14 +10,14 @@ export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
       name: 'cku',
-      description: 'Sync claude-kit mods: install new, remove gone, update the rest',
+      description: 'Sync claude-kit plugins: install new, remove gone, update the rest',
       immediate: true,
     })
 
     return next(e)
   })
 
-  // Pulls the marketplace, then makes the installed claude-kit mods match its
+  // Pulls the marketplace, then makes the installed claude-kit plugins match its
   // catalog, then /reload-plugins. Reports through toasts only.
   on('command.run', { command: 'cku' }, async $ => {
     const run = async (...argv: string[]) => {
