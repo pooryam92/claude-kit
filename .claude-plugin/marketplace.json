@@ -5,6 +5,6 @@
   "plugins": [
     { "name": "ckopen", "source": "./plugins/ckopen", "description": "/ckopen — open the session's directory in VS Code" },
     { "name": "ckupdate", "source": "./plugins/ckupdate", "description": "/ckupdate — sync claude-kit plugins: install new, remove gone, update the rest" },
-    { "name": "brainstorm", "source": "./plugins/brainstorm", "description": "/brainstorm — idea generation that samples the tails of the distribution instead of the obvious answers" }
+    { "name": "ckbrainstorm", "source": "./plugins/ckbrainstorm", "description": "/ckbrainstorm — idea generation that samples the tails of the distribution instead of the obvious answers" }
   ]
 }

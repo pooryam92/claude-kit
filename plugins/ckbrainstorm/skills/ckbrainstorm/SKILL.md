@@ -1,5 +1,5 @@
 ---
-name: brainstorm
+name: ckbrainstorm
 description: Brainstorm and generate ideas for whatever the user describes, sampling unusual candidates instead of the obvious ones. Use whenever the user says "let's brainstorm", "come up with ideas for", "give me ideas", "what are some ways to", "options for", "alternatives to", "names for", "angles on", "how else could we", or asks for suggestions, variations, concepts, approaches, titles, taglines, features, hooks, or hypotheses, even casually or with typos. Also use when they say earlier ideas were obvious, generic, or samey and want fresh ones.
 ---
 
