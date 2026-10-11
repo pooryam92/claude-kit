@@ -1,1 +1,1 @@
-{ "name": "cku", "version": "0.2.1", "author": { "name": "Poorya" }, "description": "/cku — sync claude-kit plugins: install new, remove gone, update the rest" }
+{ "name": "cku", "version": "0.3.0", "author": { "name": "Poorya" }, "description": "/cku — sync claude-kit plugins: install new, remove gone, update the rest" }

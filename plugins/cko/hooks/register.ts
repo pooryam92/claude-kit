@@ -1,4 +1,16 @@
-import type { Register } from 'claude-code'
+import type { EngineInterface as Engine, Register } from 'claude-code'
+
+const message = (err: unknown) => (err instanceof Error ? err.message : String(err))
+
+const command = async ($: Engine, ...argv: string[]) =>
+  (await $.env.get('OS')) === 'Windows_NT' ? ['cmd', '/c', ...argv] : argv
+
+const openInVsCode = async ($: Engine) => {
+  const dir = await $.session.cwd()
+  const argv = await command($, 'code', dir)
+  const { exitCode, stderr } = await $.process.run(argv, { timeoutMs: 15_000 })
+  return exitCode === 0 ? `Opened ${dir} in VS Code` : `code exited ${exitCode}: ${stderr.trim()}`
+}
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
@@ -7,21 +19,15 @@ export const register: Register = on => {
       description: 'Open this directory in VS Code',
       immediate: true,
     })
-
     return next(e)
   })
 
-  // Runs `code` directly and reports through a toast, so neither the model
-  // nor the transcript is involved. Works mid-turn.
   on('command.run', { command: 'cko' }, async $ => {
-    const dir = await $.session.cwd()
     try {
-      const { exitCode, stderr } = await $.process.run(['code', dir], { timeoutMs: 15_000 })
-      $.ui.toast(exitCode === 0 ? `Opened ${dir} in VS Code` : `code exited ${exitCode}: ${stderr.trim()}`)
+      $.ui.toast(await openInVsCode($))
     } catch (err) {
-      $.ui.toast(`Couldn't run code: ${err instanceof Error ? err.message : String(err)}`)
+      $.ui.toast(`Couldn't run code: ${message(err)}`)
     }
-
     return {}
   })
 }

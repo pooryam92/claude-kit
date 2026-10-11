@@ -1,44 +1,58 @@
-import type { CommandRunInput, ProcessRunResult } from 'claude-code'
+import type { CommandRunInput, On, ProcessRunResult } from 'claude-code'
 import { expect, test } from 'claude-code/testing'
 
-const ok: ProcessRunResult = { exitCode: 0, stdout: '', stderr: '', isStdoutTruncated: false, isStderrTruncated: false }
-const run: CommandRunInput = {
+const DIR = '/home/me/proj'
+
+const exited = (exitCode: number, stderr = ''): ProcessRunResult =>
+  ({ exitCode, stdout: '', stderr, isStdoutTruncated: false, isStderrTruncated: false })
+
+const cko: CommandRunInput = {
   command: 'cko',
   args: '',
   origin: { kind: 'composer' },
   presentation: { isFullscreen: false, columns: 120 },
 }
 
-test('/cko runs code on the session directory and toasts', async ($, on) => {
-  const ran: (readonly string[])[] = []
+type Host = { cwd?: string; os?: string; code?: ProcessRunResult }
+
+const host = (on: On, { cwd = DIR, os, code = exited(0) }: Host = {}) => {
   const toasts: string[] = []
-  on('session.cwd', () => ({ value: '/home/me/proj' }))
-  on('process.run', (_$, e) => {
-    ran.push(e.argv)
-    return { value: ok }
-  })
+  const ran: (readonly string[])[] = []
+  on('session.cwd', () => ({ value: cwd }))
+  on('env.get', () => ({ value: os }))
   on('ui.toast', (_$, e) => {
     toasts.push(e.text)
     return { value: undefined }
   })
+  on('process.run', (_$, e) => {
+    ran.push(e.argv)
+    return { value: code }
+  })
+  return { toasts, ran }
+}
 
-  const result = await $.command.run(run)
+test('/cko runs code on the session directory and toasts', async ($, on) => {
+  const { toasts, ran } = host(on)
 
-  expect(ran).toEqual([['code', '/home/me/proj']])
-  expect(toasts).toEqual(['Opened /home/me/proj in VS Code'])
+  const result = await $.command.run(cko)
+
+  expect(ran).toEqual([['code', DIR]])
+  expect(toasts).toEqual([`Opened ${DIR} in VS Code`])
   expect(result.text).toBeUndefined()
 })
 
-test('/cko toasts a failing code', async ($, on) => {
-  const toasts: string[] = []
-  on('session.cwd', () => ({ value: '/home/me/proj' }))
-  on('process.run', () => ({ value: { ...ok, exitCode: 127, stderr: 'code: not found\n' } }))
-  on('ui.toast', (_$, e) => {
-    toasts.push(e.text)
-    return { value: undefined }
-  })
+test('/cko goes through cmd on Windows', async ($, on) => {
+  const { ran } = host(on, { cwd: 'C:\\Users\\me\\proj', os: 'Windows_NT' })
 
-  await $.command.run(run)
+  await $.command.run(cko)
+
+  expect(ran).toEqual([['cmd', '/c', 'code', 'C:\\Users\\me\\proj']])
+})
+
+test('/cko toasts a failing code', async ($, on) => {
+  const { toasts } = host(on, { code: exited(127, 'code: not found\n') })
+
+  await $.command.run(cko)
 
   expect(toasts).toEqual(['code exited 127: code: not found'])
 })
