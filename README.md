@@ -3,18 +3,18 @@
 
 | Mod | What it does |
 | --- | --- |
-| `open` | `/open` opens the current directory in VS Code. Needs `code` on your `PATH`. |
+| `cko` | `/cko` opens the current directory in VS Code. Needs `code` on your `PATH`. |
+| `cku` | `/cku` updates all installed claude-kit mods and reloads them. |
 
 ## Install
 
 ```
-/plugin install open --marketplace pooryam92/claude-kit
+/plugin install cko --marketplace pooryam92/claude-kit
+/plugin install cku --marketplace pooryam92/claude-kit
 ```
 
 ## Update
 
-```sh
-claude plugin marketplace update claude-kit && claude plugin update open@claude-kit
 ```
-
-Then restart Claude Code.
+/cku
+```
