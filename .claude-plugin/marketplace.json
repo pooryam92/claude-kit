@@ -1,0 +1,8 @@
+{
+  "name": "claude-kit",
+  "owner": { "name": "Poorya" },
+  "description": "Poorya's Claude Code skills and mods",
+  "plugins": [
+    { "name": "open", "source": "./mods/open", "description": "/open — open the session's directory in VS Code" }
+  ]
+}
