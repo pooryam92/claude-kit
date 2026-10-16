@@ -22,3 +22,5 @@
 ```
 /ckupdate
 ```
+
+`/ckupdate` only picks up a plugin whose `version` in `.claude-plugin/plugin.json` went up, so bump it with every change.
