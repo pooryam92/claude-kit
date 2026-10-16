@@ -6,8 +6,8 @@ const DIR = '/home/me/proj'
 const exited = (exitCode: number, stderr = ''): ProcessRunResult =>
   ({ exitCode, stdout: '', stderr, isStdoutTruncated: false, isStderrTruncated: false })
 
-const ckopen: CommandRunInput = {
-  command: 'ckopen',
+const dotopen: CommandRunInput = {
+  command: 'dotopen',
   args: '',
   origin: { kind: 'composer' },
   presentation: { isFullscreen: false, columns: 120 },
@@ -31,28 +31,28 @@ const host = (on: On, { cwd = DIR, os, code = exited(0) }: Host = {}) => {
   return { toasts, ran }
 }
 
-test('/ckopen runs code on the session directory and toasts', async ($, on) => {
+test('/dotopen runs code on the session directory and toasts', async ($, on) => {
   const { toasts, ran } = host(on)
 
-  const result = await $.command.run(ckopen)
+  const result = await $.command.run(dotopen)
 
   expect(ran).toEqual([['code', DIR]])
   expect(toasts).toEqual([`Opened ${DIR} in VS Code`])
   expect(result.text).toBeUndefined()
 })
 
-test('/ckopen goes through cmd on Windows', async ($, on) => {
+test('/dotopen goes through cmd on Windows', async ($, on) => {
   const { ran } = host(on, { cwd: 'C:\\Users\\me\\proj', os: 'Windows_NT' })
 
-  await $.command.run(ckopen)
+  await $.command.run(dotopen)
 
   expect(ran).toEqual([['cmd', '/c', 'code', 'C:\\Users\\me\\proj']])
 })
 
-test('/ckopen toasts a failing code', async ($, on) => {
+test('/dotopen toasts a failing code', async ($, on) => {
   const { toasts } = host(on, { code: exited(127, 'code: not found\n') })
 
-  await $.command.run(ckopen)
+  await $.command.run(dotopen)
 
   expect(toasts).toEqual(['code exited 127: code: not found'])
 })
