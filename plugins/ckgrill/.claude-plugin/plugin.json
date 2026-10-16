@@ -1,1 +1,1 @@
-{ "name": "ckgrill", "version": "0.1.0", "author": { "name": "Poorya" }, "description": "/ckgrill — grill a plan in rounds of ready questions, each with a recommended answer, until nothing is assumed" }
+{ "name": "ckgrill", "version": "0.1.0", "author": { "name": "Poorya" }, "description": "/ckgrill — grill a plan one question at a time, each with a recommended answer, until nothing is assumed" }
