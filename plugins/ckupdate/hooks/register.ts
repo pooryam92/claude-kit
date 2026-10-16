@@ -1,6 +1,6 @@
 import type { EngineInterface as Engine, Register } from 'claude-code'
 
-const MARKETPLACE = 'dotclaude'
+const MARKETPLACE = 'claude-kit'
 
 type Installed = { id: string; scope: string }
 type Marketplace = { name: string; installLocation: string }
@@ -67,22 +67,22 @@ const summary = ({ added, removed, updated }: Changes) => {
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
-      name: 'dotupdate',
-      description: 'Sync dotclaude plugins: install new, remove gone, update the rest',
+      name: 'ckupdate',
+      description: 'Sync claude-kit plugins: install new, remove gone, update the rest',
       immediate: true,
     })
     return next(e)
   })
 
-  on('command.run', { command: 'dotupdate' }, async $ => {
+  on('command.run', { command: 'ckupdate' }, async $ => {
     try {
-      $.ui.toast('Syncing dotclaude…')
+      $.ui.toast('Syncing claude-kit…')
       const changes = await sync($)
-      $.ui.toast(`dotclaude: ${summary(changes)}, reloading…`)
+      $.ui.toast(`claude-kit: ${summary(changes)}, reloading…`)
       // A command can't run another command from inside its own hook.
       $.clock.after(0, () => void $.command.run({ command: 'reload-plugins', args: '' }))
     } catch (err) {
-      $.ui.toast(`dotupdate failed: ${message(err)}`)
+      $.ui.toast(`ckupdate failed: ${message(err)}`)
     }
     return {}
   })

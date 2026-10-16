@@ -1,5 +1,5 @@
 ---
-name: dotgrill
+name: ckgrill
 description: Grill the user relentlessly about a plan, design, decision, or idea until both sides reach a shared understanding. Maps the decisions as a tree, asks every question that is ready to be answered in numbered rounds with a recommended answer for each, looks up facts itself instead of asking, and stops only when nothing is left silently assumed. Use whenever the user says "grill me", "grill this", "grill my plan", "stress-test this", "poke holes in", "interrogate this idea", "challenge my thinking", or asks to be questioned hard about something before committing to it, even casually or with typos.
 ---
 

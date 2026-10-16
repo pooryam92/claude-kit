@@ -1,11 +1,11 @@
 import type { CommandRunInput, On, ProcessRunResult } from 'claude-code'
 import { expect, mock, test } from 'claude-code/testing'
 
-const DIR = '/home/me/.claude/plugins/marketplaces/dotclaude'
+const DIR = '/home/me/.claude/plugins/marketplaces/claude-kit'
 const CATALOG_FILE = `${DIR}/.claude-plugin/marketplace.json`
 
-const dotupdate: CommandRunInput = {
-  command: 'dotupdate',
+const ckupdate: CommandRunInput = {
+  command: 'ckupdate',
   args: '',
   origin: { kind: 'composer' },
   presentation: { isFullscreen: false, columns: 120 },
@@ -19,15 +19,15 @@ const exited = (exitCode: number, output = ''): ProcessRunResult => ({
   isStderrTruncated: false,
 })
 
-const catalog = { name: 'dotclaude', plugins: [{ name: 'dotopen' }, { name: 'dotupdate' }] }
+const catalog = { name: 'claude-kit', plugins: [{ name: 'ckopen' }, { name: 'ckupdate' }] }
 const outputs: Record<string, unknown> = {
   'claude plugin marketplace list --json': [
     { name: 'claude-plugins-official', installLocation: '/x' },
-    { name: 'dotclaude', installLocation: DIR },
+    { name: 'claude-kit', installLocation: DIR },
   ],
   'claude plugin list --json': [
-    { id: 'open@dotclaude', scope: 'user' },
-    { id: 'dotupdate@dotclaude', scope: 'user' },
+    { id: 'open@claude-kit', scope: 'user' },
+    { id: 'ckupdate@claude-kit', scope: 'user' },
     { id: 'github@claude-plugins-official', scope: 'user' },
   ],
 }
@@ -62,41 +62,41 @@ const host = (on: On, { os, failure }: Host = {}) => {
   return { toasts, ran, read, reloaded: () => reloaded }
 }
 
-test('/dotupdate installs new plugins, removes gone ones, updates the rest, then reloads', async ($, on) => {
+test('/ckupdate installs new plugins, removes gone ones, updates the rest, then reloads', async ($, on) => {
   const clock = mock.clock(on)
   const { toasts, ran, read, reloaded } = host(on)
 
-  await $.command.run(dotupdate)
+  await $.command.run(ckupdate)
   expect(reloaded()).toBe(false)
   await clock.advance(0)
 
   expect(ran).toEqual([
-    'claude plugin marketplace update dotclaude',
+    'claude plugin marketplace update claude-kit',
     'claude plugin marketplace list --json',
     'claude plugin list --json',
-    'claude plugin uninstall open@dotclaude --scope user',
-    'claude plugin update dotupdate@dotclaude --scope user',
-    'claude plugin install dotopen@dotclaude --scope user',
+    'claude plugin uninstall open@claude-kit --scope user',
+    'claude plugin update ckupdate@claude-kit --scope user',
+    'claude plugin install ckopen@claude-kit --scope user',
   ])
   expect(read).toEqual([CATALOG_FILE])
   expect(reloaded()).toBe(true)
-  expect(toasts.at(-1)).toBe('dotclaude: +dotopen · -open · updated dotupdate, reloading…')
+  expect(toasts.at(-1)).toBe('claude-kit: +ckopen · -open · updated ckupdate, reloading…')
 })
 
-test('/dotupdate goes through cmd on Windows', async ($, on) => {
+test('/ckupdate goes through cmd on Windows', async ($, on) => {
   mock.clock(on)
   const { ran } = host(on, { os: 'Windows_NT' })
 
-  await $.command.run(dotupdate)
+  await $.command.run(ckupdate)
 
-  expect(ran[0]).toBe('cmd /c claude plugin marketplace update dotclaude')
+  expect(ran[0]).toBe('cmd /c claude plugin marketplace update claude-kit')
   expect(ran.every(cmd => cmd.startsWith('cmd /c claude plugin '))).toBe(true)
 })
 
-test('/dotupdate toasts a failure and stops', async ($, on) => {
+test('/ckupdate toasts a failure and stops', async ($, on) => {
   const { toasts } = host(on, { failure: 'network down' })
 
-  await $.command.run(dotupdate)
+  await $.command.run(ckupdate)
 
-  expect(toasts.at(-1)).toBe('dotupdate failed: claude plugin marketplace update dotclaude: network down')
+  expect(toasts.at(-1)).toBe('ckupdate failed: claude plugin marketplace update claude-kit: network down')
 })

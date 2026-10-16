@@ -15,14 +15,14 @@ const openInVsCode = async ($: Engine) => {
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
-      name: 'dotopen',
+      name: 'ckopen',
       description: 'Open this directory in VS Code',
       immediate: true,
     })
     return next(e)
   })
 
-  on('command.run', { command: 'dotopen' }, async $ => {
+  on('command.run', { command: 'ckopen' }, async $ => {
     try {
       $.ui.toast(await openInVsCode($))
     } catch (err) {

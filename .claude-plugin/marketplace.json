@@ -1,11 +1,11 @@
 {
-  "name": "dotclaude",
+  "name": "claude-kit",
   "owner": { "name": "Poorya" },
   "description": "Poorya's Claude Code plugins: mods and skills",
   "plugins": [
-    { "name": "dotopen", "source": "./plugins/dotopen", "description": "/dotopen — open the session's directory in VS Code" },
-    { "name": "dotupdate", "source": "./plugins/dotupdate", "description": "/dotupdate — sync dotclaude plugins: install new, remove gone, update the rest" },
-    { "name": "dotbrainstorm", "source": "./plugins/dotbrainstorm", "description": "/dotbrainstorm — first principles, ordinary personas, draft titles, make them bolder, expand five" },
-    { "name": "dotgrill", "source": "./plugins/dotgrill", "description": "/dotgrill — grill a plan in rounds of ready questions, each with a recommended answer, until nothing is assumed" }
+    { "name": "ckopen", "source": "./plugins/ckopen", "description": "/ckopen — open the session's directory in VS Code" },
+    { "name": "ckupdate", "source": "./plugins/ckupdate", "description": "/ckupdate — sync claude-kit plugins: install new, remove gone, update the rest" },
+    { "name": "ckbrainstorm", "source": "./plugins/ckbrainstorm", "description": "/ckbrainstorm — first principles, ordinary personas, draft titles, make them bolder, expand five" },
+    { "name": "ckgrill", "source": "./plugins/ckgrill", "description": "/ckgrill — grill a plan in rounds of ready questions, each with a recommended answer, until nothing is assumed" }
   ]
 }

@@ -1,5 +1,5 @@
 ---
-name: dotbrainstorm
+name: ckbrainstorm
 description: Brainstorm ideas for whatever the user describes. Strips the goal or problem down to first principles, invents a few ordinary people who meet that core in their own lives, drafts short idea titles through their eyes, revises the titles to be bolder and more different from each other, then expands the five that differ most. Use whenever the user says "let's brainstorm", "come up with ideas for", "give me ideas", "what are some ways to", "options for", "alternatives to", "names for", "angles on", "how else could we", or asks for suggestions, variations, concepts, approaches, titles, taglines, features, hooks, or hypotheses, even casually or with typos.
 ---
 
